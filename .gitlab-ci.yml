@@ -4,11 +4,11 @@ stages:
 
 flake8:
   image: python:3-slim
-  stage: PEP8 
+  stage: PEP8
   before_script:
     - pip install flake8
   script:
-    - flake8 .
+    - flake8 . --config=.flake8
   tags:
     - runner-cba-rodrigo
 
