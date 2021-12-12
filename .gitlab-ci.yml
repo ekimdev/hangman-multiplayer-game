@@ -18,6 +18,6 @@ tests:
   before_script:
     - pip install .
   script:
-    - python -m unittest
+    - python -m unittest -b
   tags:
     - docker-runner
