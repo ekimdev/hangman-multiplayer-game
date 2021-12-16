@@ -16,6 +16,7 @@ tests:
   image: python:3-slim
   stage: tests
   before_script:
+    - pip install -r requirements-dev.txt
     - pip install .
   script:
     - ./run_tests
