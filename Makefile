@@ -6,6 +6,6 @@ flake8:
 	@flake8 . --config=.flake8
 
 tests:
-	@python -m unittest -vb
+	@./run_tests
 
 .PHONY: flake8 tests
