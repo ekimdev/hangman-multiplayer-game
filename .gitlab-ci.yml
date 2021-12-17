@@ -16,8 +16,9 @@ tests:
   image: python:3-slim
   stage: tests
   before_script:
+    - pip install -r requirements-dev.txt
     - pip install .
   script:
-    - python -m unittest -b -v
+    - ./run_tests
   tags:
     - docker-runner

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+pytest -xv --cov=hmg --cov-report term-missing tests/
