@@ -26,6 +26,9 @@ tests:
   image: python:3-slim
   stage: tests
   before_script:
+    # FIXME: para poder usar el versionado
+    # TODO: crear una imágen de docker que ya tenga todas las dependencias
+    - apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
     - pip install ".[dev]"
   script:
     - ./run_tests
