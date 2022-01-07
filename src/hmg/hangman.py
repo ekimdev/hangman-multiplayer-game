@@ -40,7 +40,7 @@ class Hangman():
 
             letra_ingresada = self.pedir_letra()
             if not self.letra_is_valid(letra_ingresada):
-                letra_ingresada = pedir_letra() + 'Valida'
+                letra_ingresada = self.pedir_letra() + 'Valida'
             self.comprobar_letras_usadas(letra_ingresada)
             if letra_ingresada in self.letras_palabra_secreta:
                 self.letras_palabra_secreta.remove(letra_ingresada)
