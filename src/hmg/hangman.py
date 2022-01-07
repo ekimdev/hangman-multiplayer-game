@@ -49,6 +49,7 @@ class Hangman():
 
         self.terminar_juego()
 
+
 def get_word(archivo):
     word = random.choice(words)
     while '-' in word or ' ' in word:
