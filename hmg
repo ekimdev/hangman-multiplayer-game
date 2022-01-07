@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+
+from hmg.hangman import Hangman
+
+Hangman('*').start_game()
