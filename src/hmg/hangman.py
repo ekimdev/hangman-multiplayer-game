@@ -41,8 +41,8 @@ class Hangman():
 
             letra_ingresada = self.pedir_letra()
             if not self.letra_is_valid(letra_ingresada):
-                letra_ingresada = self.pedir_letra(' valida')
-            continue
+                print('Por favor ingresa una letra valida\n')
+                continue
 
             self.comprobar_letras_usadas(letra_ingresada)
             if letra_ingresada in self.letras_palabra_secreta:
