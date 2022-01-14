@@ -39,10 +39,17 @@ class Hangman():
         while len(self.letras_palabra_secreta) > 0 and self.vidas > 0:
             print(self.tablero)
 
-            letra_ingresada = self.pedir_letra()
+            letra_ingresada = self.pedir_letra().upper()
             if not self.letra_is_valid(letra_ingresada):
                 print('Por favor ingresa una letra valida\n')
                 continue
+
+            for _ in range(self.palabra_secreta.count(letra_ingresada)):
+                index = self.palabra_secreta.index(letra_ingresada)
+                self.palabra_secreta.pop(index)
+                self.palabra_secreta.insert(index, self.char_tablero)
+                self.tablero.pop(index)
+                self.tablero.insert(index, letra_ingresada)
 
             self.comprobar_letras_usadas(letra_ingresada)
             if letra_ingresada in self.letras_palabra_secreta:
