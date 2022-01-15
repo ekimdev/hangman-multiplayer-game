@@ -1,6 +1,21 @@
 #!/usr/bin/env python3
 
+import argparse
+
 
 from hmg.hangman import Hangman
 
-Hangman('*').start_game()
+
+def get_cli_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser()
+    # TODO: add arguments
+    return parser
+
+
+def main():
+    _ = get_cli_parser().parse_args()
+    Hangman('*').start_game()
+
+
+if __name__ == "__main__":
+    main()
