@@ -8,13 +8,14 @@ from hmg.hangman import Hangman
 
 def get_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
-    # TODO: add arguments
+    parser.add_argument("-c", "--char", default="-", help="Caracter de relleno")
     return parser
 
 
 def main():
-    _ = get_cli_parser().parse_args()
-    Hangman('*').start_game()
+    args = get_cli_parser().parse_args()
+    hmg = Hangman(char_tablero=args.char)
+    hmg.start_game()
 
 
 if __name__ == "__main__":
