@@ -39,7 +39,7 @@ class Hangman():
 
     def start_game(self):
         while len(self.letras_palabra_secreta) > 0 and self.vidas > 0:
-            # print(self.tablero)
+            clean_screen()
             draw_header(self.tablero, self.letras_usadas, self.vidas)
 
             letra_ingresada = self.pedir_letra().upper()
