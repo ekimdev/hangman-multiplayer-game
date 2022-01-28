@@ -15,10 +15,9 @@ def draw_board(tablero):
     print(''.join(tablero), end='')
 
 
-def draw_header(tablero, letras_usadas, vidas, juego):
+def draw_header(tablero, letras_usadas, vidas):
     draw_board(tablero)
     print(' ' * 20, end='')
-    print(f'Letras usadas: {letras_usadas}', end='')
+    print(f'Letras usadas: {",".join(letras_usadas)}', end='')
     print(' ' * 20, end='')
-    print(f'Vidas: {vidas}', end='')
-    print(' ' * 20, end='')
+    print(f'Vidas: {vidas}', end='\n' * 5)
