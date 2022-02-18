@@ -1,10 +1,9 @@
-
 class Game:
     OPTION_ONE_PLAYER = 1
     OPTION_TWO_PLAYERS = 2
     OPTION_EXIT = 3
 
-    def __init__(self, nombre_juego=''):
+    def __init__(self, nombre_juego=""):
         self.nombre_juego = nombre_juego
 
     def build_menu(self):
@@ -24,9 +23,9 @@ class Game:
 
         while True:
             try:
-                option = int(input('Elige una opcion: '))
+                option = int(input("Elige una opcion: "))
             except ValueError:
-                print('La opcion no es valida, ingresa de nuevo!')
+                print("La opcion no es valida, ingresa de nuevo!")
                 print(menu)
                 continue
             else:
