@@ -5,7 +5,6 @@ from hmg import display
 
 
 class CleanScreenTestCase(unittest.TestCase):
-
     @mock.patch("hmg.display.sys.platform", "linux")
     def test_clean_linux(self):
         with mock.patch("os.system") as mock_system:
