@@ -1,3 +1,4 @@
 # TODO: pinear las versiones, pip-compile?
 pytest
 pytest-cov
+black
