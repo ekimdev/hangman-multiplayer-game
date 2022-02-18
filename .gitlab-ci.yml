@@ -1,10 +1,20 @@
 stages:
-  - PEP8
+  - quality
   - tests
+
+format check:
+  image: python:3-slim
+  stage: quality
+  before_script:
+    - pip install black
+  script:
+    - black src/ tests/ --check
+  tags:
+    - docker-runner
 
 flake8:
   image: python:3-slim
-  stage: PEP8
+  stage: quality
   before_script:
     - pip install flake8
   script:
