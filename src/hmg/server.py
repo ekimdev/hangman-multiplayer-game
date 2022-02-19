@@ -62,9 +62,20 @@ class Server:
                     sock.send(pickle.dumps(data))
 
 
-def cli_parser():
+def get_cli_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-H", "--host", default=socket.gethostname())
     parser.add_argument("-p", "--port", default=8889)
 
     return parser
+
+
+def main():
+    args = get_cli_parser().parse_args()
+
+    server = Server(host=args.host, port=args.port)
+    server.serve_forever()
+
+
+if __name__ == "__main__":
+    main()
