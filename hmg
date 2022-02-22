@@ -4,6 +4,7 @@ import argparse
 
 
 from hmg.hangman import Hangman
+from hmg.word_utils import get_word_from_internet
 
 
 def get_cli_parser() -> argparse.ArgumentParser:
@@ -13,8 +14,9 @@ def get_cli_parser() -> argparse.ArgumentParser:
 
 
 def main():
+    palabra_secreta = get_word_from_internet()
     args = get_cli_parser().parse_args()
-    hmg = Hangman(char_tablero=args.char)
+    hmg = Hangman(char_tablero=args.char, palabra_secreta=palabra_secreta)
     hmg.start_game()
 
 
