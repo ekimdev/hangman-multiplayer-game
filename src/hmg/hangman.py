@@ -1,15 +1,12 @@
-import random
-
 from hmg.display import clean_screen, draw_header
 
 
-words = ["aback"]
-
-
 class Hangman:
-    def __init__(self, char_tablero="-", nombre_jugador="player_default"):
+    def __init__(
+        self, palabra_secreta, char_tablero="-", nombre_jugador="player_default"
+    ):
         self.nombre_jugador = nombre_jugador
-        self.palabra_secreta = get_word(words)
+        self.palabra_secreta = palabra_secreta
         self.letras_palabra_secreta = set(self.palabra_secreta)
         self.letras_usadas = set()
         self.char_tablero = char_tablero
@@ -61,10 +58,3 @@ class Hangman:
                 self.vidas = self.vidas - 1
 
         self.terminar_juego()
-
-
-def get_word(archivo):
-    word = random.choice(words)
-    while "-" in word or " " in word:
-        word = random.choice(words)
-    return list(word.upper())
