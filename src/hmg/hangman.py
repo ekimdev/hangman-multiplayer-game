@@ -6,6 +6,10 @@ class Hangman:
         self.char_tablero = char_tablero
         self.tablero = [self.char_tablero for _ in range(len(self.palabra_secreta))]
 
+    @property
+    def is_completed(self):
+        return self.tablero.count(self.char_tablero) == 0
+
     def letra_is_valid(self, letra):
         letra_valid = True
         if letra.isdigit() or not letra:
@@ -33,6 +37,6 @@ class Hangman:
             self.palabra_secreta.pop(index)
             self.palabra_secreta.insert(index, self.char_tablero)
             self.tablero.pop(index)
-            self.tablero.inser(index, letra_ingresada)
+            self.tablero.insert(index, letra_ingresada)
 
         self.comprobar_letras_usadas(letra_ingresada)
