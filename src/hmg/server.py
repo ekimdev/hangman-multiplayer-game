@@ -3,11 +3,14 @@ import threading
 import argparse
 import pickle
 
+from hmg.word_utils import get_word_from_internet
+
 
 class Server:
     def __init__(self, host, port):
         self.host = host
         self.port = port
+        self.secret_word = None
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._players = {}
 
@@ -15,6 +18,9 @@ class Server:
         self._socket.bind((self.host, self.port))
         self._socket.listen(2)
         print(f"[*] Server listening on {self.host}:{self.port}")
+        print("[*] Getting word, wait...")
+        self.secret_word = get_word_from_internet()
+        print(f"[*] Word={self.secret_word}")
         self._listen_connection()
 
     def _listen_connection(self):
@@ -39,7 +45,7 @@ class Server:
             client_thread.start()
 
     def _handle_client(self, client, addr, username):
-        client.send(pickle.dumps({"msg": "bandera"}))
+        client.send(pickle.dumps({"msg": self.secret_word}))
 
         while True:
             print("[*] Waiting for client message...")
