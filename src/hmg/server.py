@@ -41,14 +41,13 @@ class Server:
     def _handle_client(self, client, addr, username):
         client.send(pickle.dumps({"msg": "bandera"}))
 
-        is_online = True
-        while is_online:
+        while True:
             print("[*] Waiting for client message...")
             msg_client = client.recv(1024)
             if not msg_client:
                 print(f"[*] Client {username} disconnected")
                 del self._players[username]
-                is_online = False
+                break
 
             data = pickle.loads(msg_client)
             print(f"[*] Sending everyone {data}")
