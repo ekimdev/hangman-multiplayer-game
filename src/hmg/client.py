@@ -25,10 +25,11 @@ class Client:
 
         while True:
             print("Waiting for oponent...")
-            draw_header(game.tablero, game.letras_usadas, 5)
 
             msg_server = self._socket.recv(1024)
             payload = pickle.loads(msg_server)
+            game.actualizar_tablero(payload["msg"])
+            draw_header(game.tablero, game.letras_usadas, 5)
 
             if payload["win"]:
                 print("Perdiste")
@@ -42,8 +43,11 @@ class Client:
                             pickle.dumps({"msg": user_input, "win": True})
                         )
                         break
+                    print(f"La palabra: {user_input}, no es correcta...")
                     self._socket.send(pickle.dumps({"msg": "", "win": False}))
                 else:
+                    game.comprobar_letras_usadas(user_input)
+
                     if game.letra_esta_en_la_palabra(user_input):
                         game.actualizar_tablero(user_input)
                         self._socket.send(
