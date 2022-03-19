@@ -1,9 +1,21 @@
+import logging
 import socket
 import threading
 import argparse
 import pickle
 
+from rich.console import Console
+from rich.logging import RichHandler
+
 from hmg.word_utils import get_word_from_internet
+
+
+FORMAT_LOGGING = "%(message)s"
+logging.basicConfig(level=logging.INFO, format=FORMAT_LOGGING, handlers=[RichHandler()])
+
+logger = logging.getLogger("hmg-server")
+
+console = Console()
 
 
 class Server:
@@ -17,10 +29,10 @@ class Server:
     def serve_forever(self):
         self._socket.bind((self.host, self.port))
         self._socket.listen(2)
-        print(f"[*] Server listening on {self.host}:{self.port}")
-        print("[*] Getting word, wait...")
-        self.secret_word = get_word_from_internet()
-        print(f"[*] Word={self.secret_word}")
+        with console.status("[blue]Searching for word, wait..."):
+            self.secret_word = get_word_from_internet()
+
+        logger.info("Server ready and listening on %s:%s", self.host, self.port)
         self._listen_connection()
 
     def _listen_connection(self):
@@ -36,7 +48,7 @@ class Server:
             conn, addr = self._socket.accept()
             data = pickle.loads(conn.recv(1024))
             username = data["user"]
-            print(f"[*] {username}[{addr}] connected")
+            logger.info("Username=%s with address=%s connected", username, addr)
             self._players[username] = conn
 
             client_thread = threading.Thread(
@@ -48,15 +60,15 @@ class Server:
         client.send(pickle.dumps({"msg": self.secret_word}))
 
         while True:
-            print("[*] Waiting for client message...")
+            logger.info("Waiting for client message...")
             msg_client = client.recv(1024)
             if not msg_client:
-                print(f"[*] Client {username} disconnected")
+                logger.warning("Client=%s disconnected", username)
                 del self._players[username]
                 break
 
             data = pickle.loads(msg_client)
-            print(f"[*] Sending everyone {data}")
+            logger.info("Sending data=%s", data)
 
             for user, sock in self._players.items():
                 if user != username:
@@ -79,7 +91,10 @@ def main():
     args = get_cli_parser().parse_args()
 
     server = Server(host=args.host, port=args.port)
-    server.serve_forever()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        logger.info("Exiting...")
 
 
 if __name__ == "__main__":
