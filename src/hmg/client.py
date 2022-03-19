@@ -5,11 +5,14 @@ import argparse
 from hmg.hangman import Hangman
 from hmg.display import draw_header
 
+DEFAULT_BOARD_CHAR = "-"
+
 
 class Client:
-    def __init__(self, host, port):
+    def __init__(self, host, port, board_char):
         self.host = host
         self.port = port
+        self.board_char = board_char
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     def connect_to_server(self):
@@ -21,7 +24,7 @@ class Client:
 
         payload = pickle.loads(self._socket.recv(1024))
         secret_word = payload["msg"]
-        game = Hangman(secret_word)
+        game = Hangman(secret_word, char_tablero=self.board_char)
 
         while True:
             print("Waiting for oponent...")
@@ -59,12 +62,22 @@ def get_cli_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-H", "--host", default=socket.gethostname())
     parser.add_argument("-p", "--port", default=8889)
+    parser.add_argument(
+        "-c",
+        "--board-char",
+        default=DEFAULT_BOARD_CHAR,
+        help="Char used for fill board",
+    )
     return parser
 
 
 def main():
     args = get_cli_parser().parse_args()
-    client = Client(host=args.host, port=args.port)
+    client = Client(
+        host=args.host,
+        port=args.port,
+        board_char=args.board_char,
+    )
     client.connect_to_server()
     client.start_game()
 
