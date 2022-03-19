@@ -18,6 +18,7 @@ def draw_board(tablero):
 def draw_header(tablero, letras_usadas, vidas):
     draw_board(tablero)
     print(" " * 20, end="")
-    print(f'Letras usadas: {",".join(letras_usadas)}', end="")
+    used_letter_board = ",".join(letras_usadas[1:])
+    print(f"Letras usadas: {used_letter_board}", end="")
     print(" " * 20, end="")
     print(f"Vidas: {vidas}", end="\n" * 5)
