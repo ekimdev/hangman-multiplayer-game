@@ -38,5 +38,3 @@ class Hangman:
             self.palabra_secreta.insert(index, self.char_tablero)
             self.tablero.pop(index)
             self.tablero.insert(index, letra_ingresada)
-
-        self.comprobar_letras_usadas(letra_ingresada)
