@@ -19,18 +19,19 @@ console = Console()
 
 
 class Server:
-    def __init__(self, host, port):
+    def __init__(self, host, port, secret_word=None):
         self.host = host
         self.port = port
-        self.secret_word = None
+        self.secret_word = secret_word
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._players = {}
 
     def serve_forever(self):
         self._socket.bind((self.host, self.port))
         self._socket.listen(2)
-        with console.status("[blue]Searching for word, wait..."):
-            self.secret_word = get_word_from_internet()
+        if self.secret_word is None:
+            with console.status("[blue]Searching for word, wait..."):
+                self.secret_word = get_word_from_internet()
 
         logger.info("Server ready and listening on %s:%s", self.host, self.port)
         self._listen_connection()
@@ -83,6 +84,12 @@ def get_cli_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-H", "--host", default=socket.gethostname())
     parser.add_argument("-p", "--port", default=8889)
+    parser.add_argument(
+        "-w",
+        "--word",
+        default=None,
+        help="Word to use instead of internet (usefull for testing)",
+    )
 
     return parser
 
@@ -90,7 +97,7 @@ def get_cli_parser():
 def main():
     args = get_cli_parser().parse_args()
 
-    server = Server(host=args.host, port=args.port)
+    server = Server(host=args.host, port=args.port, secret_word=args.word)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
