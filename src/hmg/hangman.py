@@ -16,8 +16,11 @@ class Hangman:
             letra_valid = False
         return letra_valid
 
-    def pedir_letra(self, msg=""):
-        return input(f"Ingresa una letra{msg}: ")
+    def pedir_letra(self):
+        while True:
+            user_input = input("Ingresa una letra: ").strip()
+            if user_input:
+                return user_input
 
     def comprobar_letras_usadas(self, letra_ingresada):
         if letra_ingresada not in self.letras_usadas:
