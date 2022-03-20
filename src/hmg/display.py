@@ -1,6 +1,8 @@
 import os
 import sys
 
+from hmg import __version__
+
 
 def clean_screen():
     comando = "clear"
@@ -21,4 +23,6 @@ def draw_header(tablero, letras_usadas, vidas):
     used_letter_board = ",".join(letras_usadas[1:])
     print(f"Letras usadas: {used_letter_board}", end="")
     print(" " * 20, end="")
-    print(f"Vidas: {vidas}", end="\n" * 5)
+    print(f"Vidas: {vidas}", end="")
+    print(" " * 20, end="")
+    print(f"[version={__version__}]", end="\n" * 5)
