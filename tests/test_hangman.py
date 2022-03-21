@@ -43,3 +43,11 @@ class HangmanTestCase(unittest.TestCase):
             expected_char = expected.pop(0)
 
             self.assertEqual(valid_char, expected_char)
+
+    def test_char_is_used(self):
+        self.player.letras_usadas = set(["a", "b", "c"])
+        self.assertTrue(self.player.char_is_used("a"))
+
+    def test_char_is_not_used(self):
+        self.player.letras_usadas = set(["a", "b", "c"])
+        self.assertFalse(self.player.char_is_used("d"))
