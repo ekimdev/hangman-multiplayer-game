@@ -10,18 +10,12 @@ class Hangman:
     def is_completed(self):
         return self.tablero.count(self.char_tablero) == 0
 
-    def letra_is_valid(self, letra):
+    @staticmethod
+    def letra_is_valid(letra):
         letra_valid = True
         if letra.isdigit() or not letra:
             letra_valid = False
         return letra_valid
-
-    def pedir_letra(self):
-        while True:
-            user_input = input("Ingresa una letra: ").strip()
-            user_input_is_valid = self.letra_is_valid(user_input)
-            if user_input_is_valid:
-                return user_input.lower()
 
     def char_is_used(self, char):
         is_used = char in self.letras_usadas

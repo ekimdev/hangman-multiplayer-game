@@ -3,7 +3,7 @@ import socket
 import argparse
 
 from hmg.hangman import Hangman
-from hmg.display import draw_header
+from hmg import ui
 
 DEFAULT_BOARD_CHAR = "-"
 
@@ -19,43 +19,61 @@ class Client:
         self._socket.connect((self.host, self.port))
 
     def start_game(self):
-        username = input("Ingresa tu nombre de usuario: ")
-        self._socket.send(pickle.dumps({"user": username}))
+        ui.console.clear()
+        ui.console.rule(title="Hangman Multiplayer")
+        username = ui.ask_username()
+        ui.console.clear()
+        with ui.console.status("Waiting for oponent..."):
+            self._socket.send(pickle.dumps({"user": username}))
+            payload = pickle.loads(self._socket.recv(1024))
+            secret_word = payload["msg"]
 
-        payload = pickle.loads(self._socket.recv(1024))
-        secret_word = payload["msg"]
         game = Hangman(secret_word, char_tablero=self.board_char)
 
         while True:
-            print("Wait for your turn...")
-            msg_server = self._socket.recv(1024)
+            with ui.console.status("Waiting for oponent..."):
+                msg_server = self._socket.recv(1024)
+
             payload = pickle.loads(msg_server)
+            turn = payload["turn"]
             game.actualizar_tablero(payload["msg"])
-            draw_header(game.tablero, game.letras_usadas, 5)
+            kwargs = dict(
+                turn=turn,
+                username=username,
+                used_chars=game.letras_usadas,
+                board=game.tablero,
+            )
+            ui.draw_header(**kwargs)
 
             if payload["win"]:
-                print("Perdiste")
+                ui.console.clear()
+                ui.draw_panel_word(secret_word.upper())
+                ui.final_msg("red", "Perdiste...")
                 break
             elif payload["turn"]:
-                user_input = game.pedir_letra()
+                user_input = ui.ask_letter_or_word()
                 if len(user_input) > 1:
                     if user_input == secret_word:
-                        print("Ganaste!!")
+                        ui.console.clear()
+                        ui.draw_panel_word(secret_word.upper())
+                        ui.final_msg("green", "Ganaste!!")
                         self._socket.send(
                             pickle.dumps({"msg": user_input, "win": True})
                         )
                         break
-                    print(f"La palabra: {user_input}, no es correcta...")
                     self._socket.send(pickle.dumps({"msg": "", "win": False}))
                 else:
-                    if game.char_is_used(user_input):
-                        print(f"Ya ingresaste la letra {user_input}")
+                    game.char_is_used(user_input)
+                    # FIXME: quizas la funcion debe llamarse de otra manera.
+                    # ya no deberia devolver True o False.
 
                     if game.letra_esta_en_la_palabra(user_input):
                         game.actualizar_tablero(user_input)
 
                         if game.is_completed:
-                            print("Ganaste!!")
+                            ui.console.clear()
+                            ui.draw_panel_word(secret_word.upper())
+                            ui.final_msg("green", "Ganaste!!")
                             self._socket.send(
                                 pickle.dumps(
                                     {"msg": user_input, "win": game.is_completed}
