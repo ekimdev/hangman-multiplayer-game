@@ -49,7 +49,8 @@ class Client:
                     print(f"La palabra: {user_input}, no es correcta...")
                     self._socket.send(pickle.dumps({"msg": "", "win": False}))
                 else:
-                    game.comprobar_letras_usadas(user_input)
+                    if game.char_is_used(user_input):
+                        print(f"Ya ingresaste la letra {user_input}")
 
                     if game.letra_esta_en_la_palabra(user_input):
                         game.actualizar_tablero(user_input)

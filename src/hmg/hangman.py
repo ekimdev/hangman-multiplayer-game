@@ -23,11 +23,10 @@ class Hangman:
             if user_input_is_valid:
                 return user_input.lower()
 
-    def comprobar_letras_usadas(self, letra_ingresada):
-        if letra_ingresada not in self.letras_usadas:
-            self.letras_usadas.add(letra_ingresada)
-        else:
-            print(f"Ya ingresaste la letra {letra_ingresada}")
+    def char_is_used(self, char):
+        is_used = char in self.letras_usadas
+        self.letras_usadas.add(char)
+        return is_used
 
     def letra_esta_en_la_palabra(self, letra_ingresada):
         if letra_ingresada in self.letras_palabra_secreta:
