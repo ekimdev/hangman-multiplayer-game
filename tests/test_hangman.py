@@ -34,3 +34,12 @@ class HangmanTestCase(unittest.TestCase):
 
             # Check que input se ha llamado 3 veces (a b y c)
             self.assertEqual(mock_input.call_count, 4)
+
+    def test_pedir_letra_lowercase(self):
+        valid_inputs = ["A", "b", "C", "d"]
+        expected = ["a", "b", "c", "d"]
+        with mock.patch("builtins.input", side_effect=valid_inputs):
+            valid_char = self.player.pedir_letra()
+            expected_char = expected.pop(0)
+
+            self.assertEqual(valid_char, expected_char)
