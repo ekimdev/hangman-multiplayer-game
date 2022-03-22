@@ -49,6 +49,10 @@ class Server:
             conn, addr = self._socket.accept()
             data = pickle.loads(conn.recv(1024))
             username = data["user"]
+
+            if username in self._players.keys():
+                username += "_x"
+
             logger.info("Username=%s with address=%s connected", username, addr)
             self._players[username] = conn
 
