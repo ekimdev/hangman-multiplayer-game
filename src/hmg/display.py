@@ -14,13 +14,13 @@ def clean_screen():
 
 
 def draw_board(tablero):
-    print("".join(tablero), end="")
+    print("".join(tablero).upper(), end="")
 
 
 def draw_header(tablero, letras_usadas, vidas):
     draw_board(tablero)
     print(" " * 20, end="")
-    used_letter_board = ",".join(letras_usadas[1:])
+    used_letter_board = ",".join(letras_usadas).upper()
     print(f"Letras usadas: {used_letter_board}", end="")
     print(" " * 20, end="")
     print(f"Vidas: {vidas}", end="")

@@ -21,7 +21,7 @@ class Hangman:
             user_input = input("Ingresa una letra: ").strip()
             user_input_is_valid = self.letra_is_valid(user_input)
             if user_input_is_valid:
-                return user_input
+                return user_input.lower()
 
     def comprobar_letras_usadas(self, letra_ingresada):
         if letra_ingresada not in self.letras_usadas:
