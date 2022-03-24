@@ -95,7 +95,7 @@ class Server:
 def get_cli_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-H", "--host", default=socket.gethostname())
-    parser.add_argument("-p", "--port", default=8889)
+    parser.add_argument("-p", "--port", type=int, default=8889)
     parser.add_argument(
         "-w",
         "--word",
