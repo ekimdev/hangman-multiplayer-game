@@ -29,16 +29,11 @@ class Server:
     def _update_secret_word(self):
         with console.status("[blue]Searching for word, wait..."):
             self.secret_word = get_word_from_internet()
+        logger.info("Secret word=%s", self.secret_word)
 
     def serve_forever(self):
         self._socket.bind((self.host, self.port))
         self._socket.listen(2)
-        # FIXME: en un refactor futuro sólo se deberia llamar cuando
-        # los dos jugadores estan conectados, para eso debería cambiar un poco
-        # la lógica del manejo del cliente y quizás un poco el cliente.
-        # para evitar llamar 2 veces a la API en la primera vez que se ejecuta
-        # el server
-        self._update_secret_word()
         logger.info("Server ready and listening on %s:%s", self.host, self.port)
         self._listen_connection()
 
@@ -47,6 +42,8 @@ class Server:
         while is_listening:
             if len(self._players) == 2:
                 self._update_secret_word()
+                for _, sock in self._players.items():
+                    sock.send(pickle.dumps({"msg": self.secret_word}))
 
                 player1, player2 = self._players.values()
                 payload = {"turn": False, "win": False, "msg": ""}
@@ -70,8 +67,6 @@ class Server:
             client_thread.start()
 
     def _handle_client(self, client, addr, username):
-        client.send(pickle.dumps({"msg": self.secret_word}))
-
         while True:
             logger.info("Waiting for client message...")
             msg_client = client.recv(1024)

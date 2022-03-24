@@ -27,8 +27,7 @@ class Client:
         game = Hangman(secret_word, char_tablero=self.board_char)
 
         while True:
-            print("Waiting for oponent...")
-
+            print("Wait for your turn...")
             msg_server = self._socket.recv(1024)
             payload = pickle.loads(msg_server)
             game.actualizar_tablero(payload["msg"])
