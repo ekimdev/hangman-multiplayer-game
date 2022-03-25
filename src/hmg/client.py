@@ -54,6 +54,16 @@ class Client:
 
                     if game.letra_esta_en_la_palabra(user_input):
                         game.actualizar_tablero(user_input)
+
+                        if game.is_completed:
+                            print("Ganaste!!")
+                            self._socket.send(
+                                pickle.dumps(
+                                    {"msg": user_input, "win": game.is_completed}
+                                )
+                            )
+                            break
+
                         self._socket.send(
                             pickle.dumps({"msg": user_input, "win": game.is_completed})
                         )
