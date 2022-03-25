@@ -8,4 +8,4 @@ import requests
 def get_word_from_internet() -> str:
     url = "https://palabras-aleatorias-public-api.herokuapp.com/random"
     response = requests.get(url)
-    return response.json()["body"]["Word"]
+    return response.json()["body"]["Word"].split()[0]
