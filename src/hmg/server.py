@@ -15,6 +15,8 @@ logging.basicConfig(level=logging.INFO, format=FORMAT_LOGGING, handlers=[RichHan
 
 logger = logging.getLogger("hmg-server")
 
+MAX_PLAYERS = 2
+
 console = Console()
 
 
@@ -45,7 +47,7 @@ class Server:
     def _listen_connection(self):
         is_listening = True
         while is_listening:
-            if len(self._players) == 2:
+            if len(self._players) == MAX_PLAYERS:
                 self._update_secret_word()
 
                 player1, player2 = self._players.values()
@@ -55,7 +57,10 @@ class Server:
                 player2.send(pickle.dumps(payload))
 
             conn, addr = self._socket.accept()
-            data = pickle.loads(conn.recv(1024))
+            incoming_message = conn.recv(1024)
+            if not incoming_message:
+                continue
+            data = pickle.loads(incoming_message)
             username = data["user"]
 
             if username in self._players.keys():
@@ -86,10 +91,9 @@ class Server:
             for user, sock in self._players.items():
                 if user != username:
                     data["turn"] = True
-                    sock.send(pickle.dumps(data))
                 else:
                     data["turn"] = False
-                    sock.send(pickle.dumps(data))
+                sock.send(pickle.dumps(data))
 
 
 def get_cli_parser():
