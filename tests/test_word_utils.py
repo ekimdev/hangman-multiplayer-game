@@ -16,3 +16,13 @@ class WordUtilsTestCase(unittest.TestCase):
         word = get_word_from_internet()
 
         self.assertEqual(word, expected)
+
+    @mock.patch("hmg.word_utils.requests.get")
+    def test_separate_word(self, mock_get):
+        fake_response = {"body": {"Word": "oso pardo"}}
+        expected = "oso"
+
+        mock_get.return_value.json.return_value = fake_response
+        word = get_word_from_internet()
+
+        self.assertEqual(word, expected)
