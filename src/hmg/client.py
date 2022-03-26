@@ -93,8 +93,13 @@ def main():
         port=args.port,
         board_char=args.board_char,
     )
-    client.connect_to_server()
-    client.start_game()
+    try:
+        client.connect_to_server()
+        client.start_game()
+    except ConnectionRefusedError:
+        print("Server is running?")
+    except KeyboardInterrupt:
+        print("Exiting...")
 
 
 if __name__ == "__main__":
