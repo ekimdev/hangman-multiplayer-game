@@ -3,7 +3,10 @@
 import unittest
 from unittest import mock
 
-from hmg.word_utils import get_word_from_internet
+from hmg.word_utils import (
+    get_word_from_internet,
+    normalize_word,
+)
 
 
 class WordUtilsTestCase(unittest.TestCase):
@@ -26,3 +29,21 @@ class WordUtilsTestCase(unittest.TestCase):
         word = get_word_from_internet()
 
         self.assertEqual(word, expected)
+
+    @mock.patch("hmg.word_utils.requests.get")
+    def test_get_word_and_normalize(self, mock_get):
+        fake_response = {"body": {"Word": "espátula"}}
+        expected = "espatula"
+
+        mock_get.return_value.json.return_value = fake_response
+        word = get_word_from_internet()
+
+        self.assertEqual(word, expected)
+
+    def test_normalize_word(self):
+        words = ["espátula", "constitución", "áéiiíóÚ"]
+        normalized_words = ["espatula", "constitucion", "aeiiioU"]
+
+        for word, normalized_word in zip(words, normalized_words):
+            w = normalize_word(word)
+            self.assertEqual(w, normalized_word)
