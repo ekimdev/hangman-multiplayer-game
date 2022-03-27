@@ -25,6 +25,7 @@ class Server:
         self.host = host
         self.port = port
         self.secret_word = secret_word
+        self._using_word_arg = secret_word is not None
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._players = {}
 
@@ -43,7 +44,9 @@ class Server:
         is_listening = True
         while is_listening:
             if len(self._players) == MAX_PLAYERS:
-                self._update_secret_word()
+                if not self._using_word_arg:
+                    self._update_secret_word()
+
                 for _, sock in self._players.items():
                     sock.send(pickle.dumps({"msg": self.secret_word}))
 
