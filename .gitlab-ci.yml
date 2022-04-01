@@ -2,6 +2,13 @@ stages:
   - quality
   - tests
 
+workflow:
+  rules:
+    - changes:
+      - src/**/*
+      - tests/**/*
+      - .gitlab-ci.yml
+
 format check:
   image: python:3-slim
   stage: quality
