@@ -1,3 +1,5 @@
+![black](https://img.shields.io/badge/code%20style-black-black)
+
 <br />
 <div align="center">
   <a href="https://gitlab.com/rodrigoacosta444/hangman-multiplayer-game">
