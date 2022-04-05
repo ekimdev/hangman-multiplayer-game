@@ -40,8 +40,8 @@ class Client:
             kwargs = dict(
                 turn=turn,
                 username=username,
-                used_chars=game.letras_usadas,
-                board=game.tablero,
+                used_chars=game.letters_used,
+                board=game.board,
             )
             ui.draw_header(**kwargs)
 

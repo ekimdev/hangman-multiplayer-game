@@ -1,37 +1,37 @@
 class Hangman:
-    def __init__(self, palabra_secreta, char_tablero="-"):
-        self.palabra_secreta = list(palabra_secreta)
-        self.letras_palabra_secreta = set(self.palabra_secreta)
-        self.letras_usadas = set()
-        self.char_tablero = char_tablero
-        self.tablero = [self.char_tablero for _ in range(len(self.palabra_secreta))]
+    def __init__(self, secret_word, char_board="-"):
+        self.secret_word = list(secret_word)
+        self.secret_word_letters = set(self.secret_word)
+        self.letters_used = set()
+        self.char_board = char_board
+        self.board = [self.char_board for _ in range(len(self.secret_word))]
 
     @property
     def is_completed(self):
-        return self.tablero.count(self.char_tablero) == 0
+        return self.board.count(self.char_board) == 0
 
     @staticmethod
-    def letra_is_valid(letra):
-        letra_valid = True
-        if letra.isdigit() or not letra:
-            letra_valid = False
-        return letra_valid
+    def letter_is_valid(letter: str) -> str:
+        valid_letter = True
+        if letter.isdigit() or not letter:
+            valid_letter = False
+        return valid_letter
 
-    def char_is_used(self, char):
-        is_used = char in self.letras_usadas
-        self.letras_usadas.add(char)
+    def char_is_used(self, char: str) -> bool:
+        is_used = char in self.letters_used
+        self.letters_used.add(char)
         return is_used
 
-    def letra_esta_en_la_palabra(self, letra_ingresada):
-        if letra_ingresada in self.letras_palabra_secreta:
-            self.letras_palabra_secreta.remove(letra_ingresada)
+    def letter_in_the_word(self, entered_letter: str) -> bool:
+        if entered_letter in self.secret_word_letters:
+            self.secret_word_letters.remove(entered_letter)
             return True
         return False
 
-    def actualizar_tablero(self, letra_ingresada):
-        for _ in range(self.palabra_secreta.count(letra_ingresada)):
-            index = self.palabra_secreta.index(letra_ingresada)
-            self.palabra_secreta.pop(index)
-            self.palabra_secreta.insert(index, self.char_tablero)
-            self.tablero.pop(index)
-            self.tablero.insert(index, letra_ingresada)
+    def update_dashboard(self, entered_letter: str) -> None:
+        for _ in range(self.secret_word.count(entered_letter)):
+            index = self.secret_word.index(entered_letter)
+            self.secret_word.pop(index)
+            self.secret_word.insert(index, self.char_board)
+            self.board.pop(index)
+            self.board.insert(index, entered_letter)
