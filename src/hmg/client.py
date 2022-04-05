@@ -28,7 +28,7 @@ class Client:
             payload = pickle.loads(self._socket.recv(1024))
             secret_word = payload["msg"]
 
-        game = Hangman(secret_word, char_tablero=self.board_char)
+        game = Hangman(secret_word, char_board=self.board_char)
 
         while True:
             with ui.console.status("Waiting for oponent..."):
@@ -36,7 +36,7 @@ class Client:
 
             payload = pickle.loads(msg_server)
             turn = payload["turn"]
-            game.actualizar_tablero(payload["msg"])
+            game.update_dashboard(payload["msg"])
             kwargs = dict(
                 turn=turn,
                 username=username,
@@ -67,8 +67,8 @@ class Client:
                     # FIXME: quizas la funcion debe llamarse de otra manera.
                     # ya no deberia devolver True o False.
 
-                    if game.letra_esta_en_la_palabra(user_input):
-                        game.actualizar_tablero(user_input)
+                    if game.letter_in_the_word(user_input):
+                        game.update_dashboard(user_input)
 
                         if game.is_completed:
                             ui.console.clear()

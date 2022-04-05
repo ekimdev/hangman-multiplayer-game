@@ -65,7 +65,7 @@ def ask_letter_or_word() -> str:
         user_input = Prompt.ask(
             "[b]Ingresa una letra o adivina la palabra secreta"
         ).strip()
-        user_input_is_valid = Hangman.letra_is_valid(user_input)
+        user_input_is_valid = Hangman.letter_is_valid(user_input)
         if user_input_is_valid:
             return user_input.lower()
 
