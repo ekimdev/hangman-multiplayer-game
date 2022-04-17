@@ -10,7 +10,7 @@
   <h3 align="center">Hangman Multiplayer Game</h3>
   <p align="center">
     <br />
-    <a href="https://github.com/centaurialpha/hangman-multiplayer-game/edit/readme/README.md#installation"><strong>Getting started »</strong></a>
+    <a href="https://github.com/centaurialpha/hangman-multiplayer-game#installation"><strong>Getting started »</strong></a>
     <br />
     ·
     <a href="https://gitlab.com/rodrigoacosta444/hangman-multiplayer-game/issues">Report Bug</a>
