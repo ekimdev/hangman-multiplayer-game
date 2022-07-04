@@ -17,22 +17,31 @@ class Client(Socket):
     def connect_to_server(self):
         self.socket.connect((self.host, self.port))
 
-    def start_game(self):
+    def initial_screen(self):
+        # FIXME: esta funcion se movera al modulo ui
         ui.console.clear()
         ui.console.rule(title="Hangman Multiplayer")
         username = ui.ask_username()
         ui.console.clear()
-        with ui.console.status("Waiting for oponent..."):
-            self.send({"user": username})
+        return username
+
+    def loading_screen(self, title):
+        # FIXME: esta funcion se movera al modulo ui
+        with ui.console.status(title):
             payload = self.recv()
-            secret_word = payload["msg"]
+            return payload
+
+    def start_game(self):
+        username = self.initial_screen()
+        self.send({"user": username})
+
+        payload = self.loading_screen("Waiting for oponent...")
+        secret_word = payload["msg"]
 
         game = Hangman(secret_word, char_board=self.board_char)
 
         while True:
-            with ui.console.status("Waiting for oponent..."):
-                payload = self.recv()
-
+            payload = self.loading_screen("Waiting for oponent...")
             turn = payload["turn"]
             game.update_dashboard(payload["msg"])
             kwargs = dict(
