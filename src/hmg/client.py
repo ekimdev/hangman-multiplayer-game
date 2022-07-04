@@ -31,6 +31,48 @@ class Client(Socket):
             payload = self.recv()
             return payload
 
+    def is_win(self, secret_word):
+        ui.console.clear()
+        ui.draw_panel_word(secret_word.upper())
+        ui.final_msg("red", "Perdiste...")
+
+    def is_turn(self, game, secret_word):
+        user_input = ui.ask_letter_or_word()
+        if len(user_input) > 1:
+            if user_input == secret_word:
+                ui.console.clear()
+                ui.draw_panel_word(secret_word.upper())
+                ui.final_msg("green", "Ganaste!!")
+                self.send(
+                    {"msg": user_input, "win": True}
+                )
+                return True
+            self.send({"msg": "", "win": False})
+        else:
+            game.char_is_used(user_input)
+            # FIXME: quizas la funcion debe llamarse de otra manera.
+            # ya no deberia devolver True o False.
+
+            if game.letter_in_the_word(user_input):
+                game.update_dashboard(user_input)
+
+                if game.is_completed:
+                    ui.console.clear()
+                    ui.draw_panel_word(secret_word.upper())
+                    ui.final_msg("green", "Ganaste!!")
+                    self.send(
+                            {"msg": user_input, "win": game.is_completed}
+                    )
+                    return True
+
+                self.send(
+                    {"msg": user_input, "win": game.is_completed}
+                )
+            else:
+                self.send(
+                    {"msg": user_input, "win": False}
+                )
+
     def start_game(self):
         username = self.initial_screen()
         self.send({"user": username})
@@ -53,46 +95,12 @@ class Client(Socket):
             ui.draw_header(**kwargs)
 
             if payload["win"]:
-                ui.console.clear()
-                ui.draw_panel_word(secret_word.upper())
-                ui.final_msg("red", "Perdiste...")
+                self.is_win(secret_word)
                 break
             elif payload["turn"]:
-                user_input = ui.ask_letter_or_word()
-                if len(user_input) > 1:
-                    if user_input == secret_word:
-                        ui.console.clear()
-                        ui.draw_panel_word(secret_word.upper())
-                        ui.final_msg("green", "Ganaste!!")
-                        self.send(
-                            {"msg": user_input, "win": True}
-                        )
-                        break
-                    self.send({"msg": "", "win": False})
-                else:
-                    game.char_is_used(user_input)
-                    # FIXME: quizas la funcion debe llamarse de otra manera.
-                    # ya no deberia devolver True o False.
-
-                    if game.letter_in_the_word(user_input):
-                        game.update_dashboard(user_input)
-
-                        if game.is_completed:
-                            ui.console.clear()
-                            ui.draw_panel_word(secret_word.upper())
-                            ui.final_msg("green", "Ganaste!!")
-                            self.send(
-                                    {"msg": user_input, "win": game.is_completed}
-                            )
-                            break
-
-                        self.send(
-                            {"msg": user_input, "win": game.is_completed}
-                        )
-                    else:
-                        self.send(
-                            {"msg": user_input, "win": False}
-                        )
+                break_loop = self.is_turn(game, secret_word)
+                if break_loop:
+                    break
 
 
 def get_cli_parser():
