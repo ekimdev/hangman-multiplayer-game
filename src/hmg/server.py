@@ -8,6 +8,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 
 from hmg.word_utils import get_word_from_internet
+from hmg.socket import Socket
 
 
 FORMAT_LOGGING = "%(message)s"
@@ -20,13 +21,11 @@ MAX_PLAYERS = 2
 console = Console()
 
 
-class Server:
+class Server(Socket):
     def __init__(self, host, port, secret_word=None):
-        self.host = host
-        self.port = port
+        super().__init__(host, port)
         self.secret_word = secret_word
         self._using_word_arg = secret_word is not None
-        self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._players = {}
 
     def _update_secret_word(self):
@@ -35,8 +34,8 @@ class Server:
         logger.info("Secret word=%s", self.secret_word)
 
     def serve_forever(self):
-        self._socket.bind((self.host, self.port))
-        self._socket.listen(2)
+        self.socket.bind((self.host, self.port))
+        self.socket.listen(2)
         logger.info("Server ready and listening on %s:%s", self.host, self.port)
         self._listen_connection()
 
@@ -56,7 +55,7 @@ class Server:
                 payload = {"turn": True, "win": False, "msg": ""}
                 player2.send(pickle.dumps(payload))
 
-            conn, addr = self._socket.accept()
+            conn, addr = self.socket.accept()
             incoming_message = conn.recv(1024)
             if not incoming_message:
                 continue
